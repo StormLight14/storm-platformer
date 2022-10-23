@@ -43,15 +43,20 @@ func movement(delta):
 		animation.stop(true);
 		
 	if is_on_floor():
-		if Input.is_action_pressed("up"):
-			animation.stop(true);
+		if Input.is_action_just_pressed("up"):
+			if state != ATTACK:
+				animation.stop(true);
 			velocity.y = -jump_strength;
 			
 		if Input.is_action_pressed("right") or Input.is_action_pressed("left"):
 			animation.current_animation = "Run";
 	else:
-		if animation.current_animation == "Run":
+		if animation.current_animation == "Run" and state != ATTACK:
 			animation.stop(true);
+
+func attack_input():
+	if Input.is_action_just_pressed("SwordAttack"):
+		state = ATTACK
 
 func move_state(delta):
 	if velocity.y < 0:
@@ -60,12 +65,11 @@ func move_state(delta):
 		animation.current_animation = "Fall";
 	else:
 		if velocity.x != 0:
-			print("x velocity is not 0");
 			animation.current_animation = "Run";
 		else:
-			print("x velocity is 0");
 			state = IDLE;
 	
+	attack_input();
 	movement(delta);
 	
 
@@ -77,7 +81,8 @@ func attack_state(delta):
 func idle_state(delta):
 	animation.current_animation = "Idle";
 	
+	attack_input();
 	movement(delta);
 	if velocity.x != 0 or velocity.y != 0:
-		state = MOVE
+		state = MOVE;
 	
