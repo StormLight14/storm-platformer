@@ -1,0 +1,140 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://Scripts/Player.gd" type="Script" id=1]
+[ext_resource path="res://Assets/Player/platformer-character.png" type="Texture" id=2]
+
+[sub_resource type="Animation" id=11]
+resource_name = "Fall"
+tracks/0/type = "value"
+tracks/0/path = NodePath("PlayerSprite/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 0 ]
+}
+
+[sub_resource type="Animation" id=12]
+resource_name = "Idle"
+tracks/0/type = "value"
+tracks/0/path = NodePath("PlayerSprite/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 0 ]
+}
+
+[sub_resource type="Animation" id=8]
+resource_name = "Jump"
+tracks/0/type = "value"
+tracks/0/path = NodePath("PlayerSprite/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 48, 49, 50, 51, 52, 53, 0 ]
+}
+
+[sub_resource type="Animation" id=2]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("PlayerSprite/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0 ]
+}
+
+[sub_resource type="Animation" id=6]
+resource_name = "Run"
+length = 0.55
+tracks/0/type = "value"
+tracks/0/path = NodePath("PlayerSprite/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3, 4, 5 ]
+}
+
+[sub_resource type="Animation" id=10]
+resource_name = "SwordAttack"
+length = 0.6
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath("PlayerSprite/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 18, 19, 20, 21 ]
+}
+
+[sub_resource type="RectangleShape2D" id=9]
+extents = Vector2( 8, 15.5 )
+
+[sub_resource type="CapsuleShape2D" id=5]
+radius = 7.0
+height = 8.0
+
+[node name="Player" type="KinematicBody2D"]
+collision_layer = 4
+collision_mask = 128
+script = ExtResource( 1 )
+
+[node name="PlayerSprite" type="Node2D" parent="."]
+
+[node name="Sprite" type="Sprite" parent="PlayerSprite"]
+texture = ExtResource( 2 )
+hframes = 6
+vframes = 9
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="PlayerSprite"]
+root_node = NodePath("../..")
+anims/Fall = SubResource( 11 )
+anims/Idle = SubResource( 12 )
+anims/Jump = SubResource( 8 )
+anims/RESET = SubResource( 2 )
+anims/Run = SubResource( 6 )
+anims/SwordAttack = SubResource( 10 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true
+smoothing_enabled = true
+
+[node name="PlayerCollision" type="CollisionShape2D" parent="."]
+position = Vector2( -3, 3.5 )
+shape = SubResource( 9 )
+
+[node name="Hurtbox" type="Area2D" parent="."]
+
+[node name="HurtboxShape" type="CollisionShape2D" parent="Hurtbox"]
+visible = false
+position = Vector2( -3, 9 )
+shape = SubResource( 5 )
