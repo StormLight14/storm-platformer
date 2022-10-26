@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Scripts/Player.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Player/platformer-character.png" type="Texture" id=2]
@@ -82,7 +82,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id=10]
 resource_name = "SwordAttack"
-length = 0.6
+length = 0.4
 step = 0.05
 tracks/0/type = "value"
 tracks/0/path = NodePath("PlayerSprite/Sprite:frame")
@@ -104,10 +104,17 @@ extents = Vector2( 8, 15.5 )
 radius = 7.0
 height = 8.0
 
+[sub_resource type="CapsuleShape2D" id=13]
+height = 22.9962
+
 [node name="Player" type="KinematicBody2D"]
 collision_layer = 4
 collision_mask = 128
 script = ExtResource( 1 )
+speed = null
+gravity = null
+max_gravity = null
+jump_strength = null
 
 [node name="PlayerSprite" type="Node2D" parent="."]
 
@@ -126,16 +133,31 @@ anims/Run = SubResource( 6 )
 anims/SwordAttack = SubResource( 10 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
+visible = false
 current = true
 smoothing_enabled = true
 
 [node name="PlayerCollision" type="CollisionShape2D" parent="."]
-position = Vector2( -3, 3.5 )
+visible = false
+position = Vector2( 0, 3.5 )
 shape = SubResource( 9 )
 
 [node name="Hurtbox" type="Area2D" parent="."]
+position = Vector2( -2, 3 )
 
 [node name="HurtboxShape" type="CollisionShape2D" parent="Hurtbox"]
-visible = false
-position = Vector2( -3, 9 )
+position = Vector2( 0, 7 )
 shape = SubResource( 5 )
+
+[node name="HitboxPivot" type="Position2D" parent="."]
+
+[node name="Hitbox" type="Area2D" parent="HitboxPivot"]
+collision_layer = 2
+collision_mask = 8
+
+[node name="HitboxShape" type="CollisionShape2D" parent="HitboxPivot/Hitbox"]
+position = Vector2( 27, -1 )
+shape = SubResource( 13 )
+disabled = true
+
+[connection signal="animation_finished" from="PlayerSprite/AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
