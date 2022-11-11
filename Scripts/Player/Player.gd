@@ -7,10 +7,10 @@ onready var hitbox = $Combat/Hitbox
 onready var hurtbox = $Combat/Hurtbox
 onready var col_shape = $PlayerCollision
 
+
 export(Resource) var playerVal
 
 var can_be_hit = true
-
 var velocity = Vector2.ZERO
 var state = IDLE
 var direction = "right"
