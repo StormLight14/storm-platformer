@@ -13,9 +13,15 @@ _global_script_classes=[ {
 "class": "GitAPI",
 "language": "NativeScript",
 "path": "res://addons/godot-git-plugin/git_api.gdns"
+}, {
+"base": "Resource",
+"class": "PlayerValues",
+"language": "GDScript",
+"path": "res://Scripts/Player/PlayerValues.gd"
 } ]
 _global_script_class_icons={
-"GitAPI": ""
+"GitAPI": "",
+"PlayerValues": ""
 }
 
 [application]

@@ -2,17 +2,12 @@ extends KinematicBody2D
 
 onready var sprite = $PlayerSprite/Sprite
 onready var animation = $PlayerSprite/AnimationPlayer
-onready var hitbox_col = $Hitbox/HitboxShape
-onready var hitbox = $Hitbox
-onready var hurtbox = $Hurtbox
+onready var hitbox_col = $Combat/Hitbox/HitboxShape
+onready var hitbox = $Combat/Hitbox
+onready var hurtbox = $Combat/Hurtbox
 onready var col_shape = $PlayerCollision
 
-export var damage = 5
-export var speed = 7000
-export var gravity = 300
-export var max_gravity = 400
-export var jump_strength = 180
-export var knockback_strength = 200
+export(Resource) var playerVal
 
 var can_be_hit = true
 
@@ -31,8 +26,8 @@ func _ready():
 	randomize();
 	
 	safe_pos = global_position;
-	hitbox.damage = damage;
-	hitbox.knockback_strength = knockback_strength;
+	hitbox.damage = playerVal.damage;
+	hitbox.knockback_strength = playerVal.knockback_strength;
 	hitbox.knockback_vector = Vector2(1, 0);
 
 func _physics_process(delta):
@@ -47,10 +42,10 @@ func _physics_process(delta):
 	velocity = move_and_slide(velocity, Vector2.UP)
 
 func movement(delta):
-	velocity.x = (Input.get_action_strength("right") - Input.get_action_strength("left")) * speed * delta
+	velocity.x = (Input.get_action_strength("right") - Input.get_action_strength("left")) * playerVal.speed * delta
 	
-	if velocity.y < max_gravity:
-		velocity.y += gravity * delta
+	if velocity.y < playerVal.max_gravity:
+		velocity.y += playerVal.gravity * delta
 		
 	if velocity.x > 0 and direction != "right":
 		flip_all();
@@ -67,7 +62,7 @@ func movement(delta):
 		if Input.is_action_pressed("up"):
 			if state != ATTACK:
 				animation.stop(true);
-			velocity.y = -jump_strength;
+			velocity.y = -playerVal.jump_strength;
 		if state != ATTACK:
 			if Input.is_action_pressed("right") or Input.is_action_pressed("left"):
 				animation.current_animation = "Run";
@@ -84,7 +79,7 @@ func flip_all():
 	else:
 		sprite.flip_h = false;
 		hitbox.knockback_vector = Vector2(1, 0);
-
+		
 	hitbox.position.x *= -1
 	hurtbox.position.x *= -1
 	col_shape.position.x *= -1
@@ -95,10 +90,10 @@ func attack_input():
 		
 		var rand_num = int(round(rand_range(0, 3)));
 		if rand_num == 0:
-			hitbox.damage = round(damage * rand_range(1.6, 2.0));
+			hitbox.damage = round(playerVal.damage * rand_range(1.6, 2.0));
 			hitbox.is_critical = true;
 		else:
-			hitbox.damage = round(damage * rand_range(0.8, 1.2));
+			hitbox.damage = round(playerVal.damage * rand_range(0.8, 1.2));
 			hitbox.is_critical = false;
 			
 		hitbox_col.disabled = false;
