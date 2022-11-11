@@ -46,7 +46,7 @@ func create_effect(effect_type, value="", type=""):
 			if type == "critical_hit":
 				effect_scene.modulate = Color(rand_range(1, 1), rand_range(0.2, 0.5), rand_range(0.2, 0.5), 1.0);
 			effect_scene.global_position = global_position;
-			get_parent().add_child(effect_scene);
+			get_tree().current_scene.add_child(effect_scene);
 		"death":
 			queue_free();
 

@@ -655,9 +655,6 @@ tile_data = PoolIntArray( 65535, 1, 65536, 0, 1, 65537, 1, 1, 65537, 2, 1, 65537
 
 [node name="Objects" type="Node2D" parent="."]
 
-[node name="Player" parent="Objects" instance=ExtResource( 1 )]
-position = Vector2( 11, -28 )
-
 [node name="Checkpoint" parent="Objects" instance=ExtResource( 9 )]
 
 [node name="Enemies" type="Node2D" parent="Objects"]
@@ -666,9 +663,12 @@ position = Vector2( 11, -28 )
 position = Vector2( 83, -31 )
 health = 2000
 
+[node name="Player" parent="Objects" instance=ExtResource( 1 )]
+position = Vector2( 11, -28 )
+
 [node name="Crates" type="Node2D" parent="Objects"]
 
-[node name="Crate0" type="StaticBody2D" parent="Objects/Crates"]
+[node name="Crate" type="StaticBody2D" parent="Objects/Crates"]
 position = Vector2( 126, -28 )
 
 [node name="Foreground" type="ParallaxBackground" parent="."]
