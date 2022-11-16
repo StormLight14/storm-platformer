@@ -9,4 +9,4 @@ speed = 7000
 gravity = 300
 max_gravity = 400
 jump_strength = 180
-knockback_strength = 200
+knockback_strength = 250

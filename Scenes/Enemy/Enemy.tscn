@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Scripts/Enemy/Enemy.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Enemies/enemy-placeholder.png" type="Texture" id=2]
 [ext_resource path="res://Scripts/Combat/Hitbox.gd" type="Script" id=3]
+[ext_resource path="res://Resources/DefaultEnemyValues.tres" type="Resource" id=4]
 
 [sub_resource type="Animation" id=5]
 length = 0.001
@@ -49,6 +50,7 @@ extents = Vector2( 11, 17 )
 collision_layer = 32
 collision_mask = 128
 script = ExtResource( 1 )
+enemyVal = ExtResource( 4 )
 
 [node name="EnemySprite" type="Node2D" parent="."]
 
@@ -65,25 +67,40 @@ anims/hit = SubResource( 4 )
 visible = false
 shape = SubResource( 2 )
 
-[node name="Hurtbox" type="Area2D" parent="."]
+[node name="Combat" type="Node2D" parent="."]
+
+[node name="Hurtbox" type="Area2D" parent="Combat"]
 visible = false
 collision_layer = 8
 collision_mask = 2
 
-[node name="HurtboxShape" type="CollisionShape2D" parent="Hurtbox"]
+[node name="HurtboxShape" type="CollisionShape2D" parent="Combat/Hurtbox"]
 shape = SubResource( 1 )
 
-[node name="Hitbox" type="Area2D" parent="."]
+[node name="Hitbox" type="Area2D" parent="Combat"]
+collision_layer = 16
 script = ExtResource( 3 )
 
-[node name="HitboxShape" type="CollisionShape2D" parent="Hitbox"]
+[node name="HitboxShape" type="CollisionShape2D" parent="Combat/Hitbox"]
+visible = false
 shape = SubResource( 6 )
 
-[node name="InvincibleTimer" type="Timer" parent="."]
+[node name="InvincibleTimer" type="Timer" parent="Combat"]
 wait_time = 0.3
 one_shot = true
 
-[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+[node name="MoveCheck" type="Node2D" parent="."]
 
-[connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]
-[connection signal="timeout" from="InvincibleTimer" to="." method="_on_InvincibleDelay_timeout"]
+[node name="LedgeCheck" type="RayCast2D" parent="MoveCheck"]
+position = Vector2( 12, 18 )
+enabled = true
+cast_to = Vector2( 0, 8 )
+collision_mask = 128
+collide_with_areas = true
+
+[node name="SideCheck" type="RayCast2D" parent="MoveCheck"]
+position = Vector2( 12, 4 )
+cast_to = Vector2( 10, 0 )
+
+[connection signal="area_entered" from="Combat/Hurtbox" to="." method="_on_Hurtbox_area_entered"]
+[connection signal="timeout" from="Combat/InvincibleTimer" to="." method="_on_InvincibleDelay_timeout"]

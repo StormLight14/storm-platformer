@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Resource",
+"class": "EnemyValues",
+"language": "GDScript",
+"path": "res://Scripts/Enemy/EnemyValues.gd"
+}, {
 "base": "EditorVCSInterface",
 "class": "GitAPI",
 "language": "NativeScript",
@@ -20,6 +25,7 @@ _global_script_classes=[ {
 "path": "res://Scripts/Player/PlayerValues.gd"
 } ]
 _global_script_class_icons={
+"EnemyValues": "",
 "GitAPI": "",
 "PlayerValues": ""
 }

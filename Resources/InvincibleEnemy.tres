@@ -1,0 +1,14 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://Scripts/Enemy/EnemyValues.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+max_speed = 5000
+speed_increment = 100
+base_speed = 3000
+health = 2000
+gravity = 300
+max_gravity = 400
+jump_strength = 180
+friction = 300

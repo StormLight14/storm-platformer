@@ -1,9 +1,10 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://Scripts/Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Player/platformer-character.png" type="Texture" id=2]
 [ext_resource path="res://Scripts/Combat/Hitbox.gd" type="Script" id=3]
 [ext_resource path="res://Resources/DefaultPlayerValues.tres" type="Resource" id=4]
+[ext_resource path="res://Scripts/Player/PlayerCombat.gd" type="Script" id=5]
 
 [sub_resource type="Animation" id=11]
 resource_name = "Fall"
@@ -18,6 +19,22 @@ tracks/0/keys = {
 "transitions": PoolRealArray( 1 ),
 "update": 1,
 "values": [ 0 ]
+}
+
+[sub_resource type="Animation" id=14]
+resource_name = "Hit"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/path = NodePath("PlayerSprite/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.3 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ 31, 32, 0 ]
 }
 
 [sub_resource type="Animation" id=12]
@@ -126,6 +143,7 @@ vframes = 9
 [node name="AnimationPlayer" type="AnimationPlayer" parent="PlayerSprite"]
 root_node = NodePath("../..")
 anims/Fall = SubResource( 11 )
+anims/Hit = SubResource( 14 )
 anims/Idle = SubResource( 12 )
 anims/Jump = SubResource( 8 )
 anims/RESET = SubResource( 2 )
@@ -144,6 +162,7 @@ position = Vector2( -2, 4 )
 shape = SubResource( 9 )
 
 [node name="Combat" type="Node2D" parent="."]
+script = ExtResource( 5 )
 
 [node name="Hitbox" type="Area2D" parent="Combat"]
 visible = false
@@ -159,12 +178,18 @@ disabled = true
 [node name="Hurtbox" type="Area2D" parent="Combat"]
 visible = false
 position = Vector2( -4, 7 )
+collision_mask = 16
 
 [node name="HurtboxShape" type="CollisionShape2D" parent="Combat/Hurtbox"]
 shape = SubResource( 5 )
 
 [node name="HitTimer" type="Timer" parent="Combat"]
+wait_time = 0.4
+one_shot = true
 
 [node name="InvincibleTimer" type="Timer" parent="Combat"]
+wait_time = 0.1
 
 [connection signal="animation_finished" from="PlayerSprite/AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
+[connection signal="area_entered" from="Combat/Hurtbox" to="Combat" method="_on_Hurtbox_area_entered"]
+[connection signal="timeout" from="Combat/InvincibleTimer" to="Combat" method="_on_InvincibleTimer_timeout"]
